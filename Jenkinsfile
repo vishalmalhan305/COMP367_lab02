@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: '<your_repo_url>'
+                git branch: 'main', url: 'https://github.com/vishalmalhan305/COMP367_lab02'
             }
         }
         stage('Build') {
