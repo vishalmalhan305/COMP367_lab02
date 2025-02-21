@@ -9,6 +9,6 @@ public class Main {
 		} else {
 		    message = "Good afternoon, Vishal, Welcome to COMP367";
 		}
-
+		System.out.println(message);
 		}
 }
