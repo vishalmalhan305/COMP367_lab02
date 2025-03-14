@@ -1,53 +1,51 @@
 pipeline {
     agent any
-
-    tools {
-        maven "Maven"
-    }
-
     environment {
-        DOCKERHUB_PWD = credentials('CredentialID_DockerHubPWD')
+        MAVEN_HOME = "C:\\maven"
+        PATH = "${MAVEN_HOME}\\bin;${env.PATH}"
     }
-
     stages {
-        stage("Checkout") {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/vishalmalhan305/COMP367_lab02'
+                // Checkout the code from your repository
+                checkout scm
             }
         }
-
-        stage("Build & Test") {
-            parallel {
-                stage("Build Maven Project") {
-                    steps {
-                        sh 'mvn clean package'
-                    }
-                }
-                stage("Unit Test") {
-                    steps {
-                        sh 'mvn test'
-                    }
-                }
-            }
-        }
-
-        stage("Docker Build & Push") {
+        stage('Build') {
             steps {
+                // Run Maven build
                 script {
-                    sh 'echo ${DOCKERHUB_PWD} | docker login -u vishalmalhan --password-stdin'
-                    sh 'docker build -t vishalmalhan/mavenwebapp:latest .'
-                    sh 'docker push vishalmalhan/mavenwebapp:latest'
+                    bat 'mvn clean install'
                 }
+            }
+        }
+        stage('Test') {
+            steps {
+                // Run Maven test
+                script {
+                    bat 'mvn test'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // Deploy the application (if needed)
+                echo 'Deploying application...'
             }
         }
     }
-
     post {
+        always {
+            // Cleanup steps (if any)
+            echo 'Cleaning up...'
+        }
         success {
-            echo "Pipeline completed successfully!"
+            // Notify on success (optional)
+            echo 'Build succeeded!'
         }
         failure {
-            echo "Pipeline failed! Check logs."
+            // Notify on failure (optional)
+            echo 'Build failed!'
         }
     }
 }
