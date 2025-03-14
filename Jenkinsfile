@@ -23,10 +23,13 @@ pipeline {
 
         stage('Docker Login') {
             steps {
-                // Log in to Docker Hub using Jenkins Credentials
+                // Log in to Docker Hub using Jenkins Credentials (only password stored in Jenkins)
                 script {
                     withCredentials([usernamePassword(credentialsId: 'CredentialID_DockerHubPWD', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh "docker login -u vishalmalhan -p ${DOCKER_PASSWORD}"
+                        // Pass password through stdin instead of using interpolation
+                        sh """
+                            echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+                        """
                     }
                 }
             }
