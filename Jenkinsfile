@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         // Install Maven
-        maven "MAVEN3"
+        maven "Maven"
     }
 
     environment {
