@@ -11,32 +11,50 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build') {
+        
+        stage('Build Maven Project') {
             steps {
-                // Run Maven build
+                // Run Maven build script
                 script {
                     bat 'mvn clean install'
                 }
             }
         }
-        stage('Test') {
+
+        stage('Docker Login') {
             steps {
-                // Run Maven test
+                // Log in to Docker Hub using Jenkins Credentials
                 script {
-                    bat 'mvn test'
+                    withCredentials([usernamePassword(credentialsId: 'CredentialID_DockerHubPWD', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin"
+                    }
                 }
             }
         }
-        stage('Deploy') {
+
+        stage('Docker Build') {
             steps {
-                // Deploy the application (if needed)
-                echo 'Deploying application...'
+                // Build Docker image from Dockerfile
+                script {
+                    docker.build("my-app:${env.BUILD_ID}")
+                }
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                // Push the Docker image to Docker Hub
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'CredentialID_DockerHubPWD', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "docker push my-app:${env.BUILD_ID}"
+                    }
+                }
             }
         }
     }
     post {
         always {
-            // Cleanup steps (if any)
+            // Cleanup or post steps
             echo 'Cleaning up...'
         }
         success {
