@@ -11,7 +11,7 @@ pipeline {
                 checkout scm
             }
         }
-        
+
         stage('Build Maven Project') {
             steps {
                 // Run Maven build script
@@ -26,7 +26,7 @@ pipeline {
                 // Log in to Docker Hub using Jenkins Credentials
                 script {
                     withCredentials([usernamePassword(credentialsId: 'CredentialID_DockerHubPWD', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh "echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin"
+                        sh "docker login -u vishalmalhan -p ${DOCKER_PASSWORD}"
                     }
                 }
             }
