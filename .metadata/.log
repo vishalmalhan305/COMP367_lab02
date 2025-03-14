@@ -1,0 +1,44 @@
+!SESSION 2025-03-14 00:05:16.739 -----------------------------------------------
+eclipse.buildId=4.33.0.20240905-0613
+java.version=22.0.2
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_CA
+Framework arguments:  -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product
+
+!ENTRY ch.qos.logback.classic 1 0 2025-03-14 00:05:24.205
+!MESSAGE Activated before the state location was initialized. Retry after the state location is initialized.
+
+!ENTRY ch.qos.logback.classic 1 0 2025-03-14 00:05:38.432
+!MESSAGE Logback config file: D:\Last Semester\DevOps Implementation\COMP367_lab02\.metadata\.plugins\org.eclipse.m2e.logback\logback.2.6.1.20240411-1122.xml
+
+!ENTRY org.eclipse.ui 2 0 2025-03-14 00:05:39.062
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2025-03-14 00:05:39.062
+!MESSAGE Commands should really have a category: plug-in='org.springframework.tooling.boot.ls', id='spring.initializr.addStarters', categoryId='org.eclipse.lsp4e.commandCategory'
+
+!ENTRY org.eclipse.ui 2 0 2025-03-14 00:05:39.546
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2025-03-14 00:05:39.546
+!MESSAGE Commands should really have a category: plug-in='org.springframework.tooling.boot.ls', id='spring.initializr.addStarters', categoryId='org.eclipse.lsp4e.commandCategory'
+
+!ENTRY org.eclipse.egit.ui 2 0 2025-03-14 00:05:47.713
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Vishal Malhan'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.m2e.core.ui 4 0 2025-03-14 00:06:21.903
+!MESSAGE OperationCanceledException
+!STACK 0
+org.eclipse.core.runtime.OperationCanceledException
+	at org.eclipse.core.runtime.SubMonitor$RootInfo.checkForCancellation(SubMonitor.java:317)
+	at org.eclipse.core.runtime.SubMonitor.split(SubMonitor.java:1127)
+	at org.eclipse.core.runtime.SubMonitor.split(SubMonitor.java:1021)
+	at org.eclipse.m2e.core.project.LocalProjectScanner.scanFolder(LocalProjectScanner.java:110)
+	at org.eclipse.m2e.core.project.LocalProjectScanner.run(LocalProjectScanner.java:65)
+	at org.eclipse.m2e.core.ui.internal.project.MavenProjectConfigurator.findConfigurableLocations(MavenProjectConfigurator.java:196)
+	at org.eclipse.ui.internal.wizards.datatransfer.SmartImportJob.getImportProposals(SmartImportJob.java:666)
+	at org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage$17.run(SmartImportRootWizardPage.java:845)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
