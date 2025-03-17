@@ -28,19 +28,26 @@ pipeline {
             }
         }
         
-        stage("Docker build") {
+        stage("Docker Login") {
             steps {
                 script {
-                    bat  'docker build -t vishalmalhan/mavenproject:latest .'
+                    sh 'docker login -u vishalmalhan -p ${DOCKERHUB_PWD}'
                 }
             }
         }
-        
-        stage("Docker login & push") {
+
+        stage("Docker Build") {
             steps {
                 script {
-                    bat  'docker login -u vishalmalhan -p ${DOCKERHUB_PWD}'
-                    bat  'docker push vishalmalhan/mavenproject:latest'
+                    sh 'docker build -t vishalmalhan/mavenwebproject:latest .'
+                }
+            }
+        }
+
+        stage("Docker Push") {
+            steps {
+                script {
+                    sh 'docker push vishalmalhan/mavenwebproject:latest'
                 }
             }
         }
