@@ -18,40 +18,31 @@ pipeline {
         
         stage("Build Maven project") {
             steps {
-                bat 'mvn clean install'
+                bat  'mvn clean install'
             }
         }
         
         stage("Unit test") {
             steps {
-                bat 'mvn test'
+                bat  'mvn test'
             }
         }
         
         stage("Docker build") {
             steps {
-                bat 'docker build -t vishalmalhan/mavenproject:latest .'
+                script {
+                    bat  'docker build -t vishalmalhan/mavenproject:latest .'
+                }
             }
         }
         
         stage("Docker login & push") {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'CredentialID_DockerHubPWD', variable: 'DOCKERHUB_PWD')]) {
-                        bat 'echo %DOCKERHUB_PWD% | docker login -u vishalmalhan --password-stdin'
-                    }
-                    bat 'docker push vishalmalhan/mavenproject:latest'
+                    bat  'docker login -u vishalmalhan -p ${DOCKERHUB_PWD}'
+                    bat  'docker push vishalmalhan/mavenproject:latest'
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'Pipeline execution completed.'
-        }
-        failure {
-            echo 'Build or deployment failed. Check logs.'
         }
     }
 }
