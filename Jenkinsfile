@@ -31,7 +31,7 @@ pipeline {
         stage("Docker Login") {
             steps {
                 script {
-                    sh 'docker login -u vishalmalhan -p ${DOCKERHUB_PWD}'
+                    bat 'docker login -u vishalmalhan -p ${DOCKERHUB_PWD}'
                 }
             }
         }
@@ -39,7 +39,7 @@ pipeline {
         stage("Docker Build") {
             steps {
                 script {
-                    sh 'docker build -t vishalmalhan/mavenwebproject:latest .'
+                    bat 'docker build -t vishalmalhan/mavenwebproject:latest .'
                 }
             }
         }
@@ -47,7 +47,7 @@ pipeline {
         stage("Docker Push") {
             steps {
                 script {
-                    sh 'docker push vishalmalhan/mavenwebproject:latest'
+                    bat 'docker push vishalmalhan/mavenwebproject:latest'
                 }
             }
         }
