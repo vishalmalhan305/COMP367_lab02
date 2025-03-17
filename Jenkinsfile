@@ -28,13 +28,6 @@ pipeline {
             }
         }
         
-        stage("Docker Login") {
-            steps {
-                script {
-                    bat 'docker login -u vishalmalhan -p ${DOCKERHUB_PWD}'
-                }
-            }
-        }
 
         stage("Docker Build") {
             steps {
