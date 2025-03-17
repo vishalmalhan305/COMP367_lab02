@@ -1,72 +1,48 @@
 pipeline {
     agent any
+    
+    tools {
+        maven "MAVEN3"
+    }
+    
     environment {
-        MAVEN_HOME = "C:\\maven"
-        PATH = "${MAVEN_HOME}\\bin;${env.PATH}"
+        DOCKERHUB_PWD = credentials('CredentialID_DockerHubPWD')
     }
+    
     stages {
-        stage('Checkout') {
+        stage("Check out") {
             steps {
-                // Checkout the code from your repository
-                checkout scm
+                git branch: 'main', url: 'https://github.com/vishalmalhan305/COMP367_lab02'
             }
         }
-
-        stage('Build Maven Project') {
+        
+        stage("Build Maven project") {
             steps {
-                // Run Maven build script
+                sh 'mvn clean install'
+            }
+        }
+        
+        stage("Unit test") {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        
+        stage("Docker build") {
+            steps {
                 script {
-                    bat 'mvn clean install'
+                    sh 'docker build -t vishalmalhan/mavenproject:latest .'
                 }
             }
         }
-
-        stage('Docker Login') {
+        
+        stage("Docker login & push") {
             steps {
-                // Log in to Docker Hub using Jenkins Credentials (only password stored in Jenkins)
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'CredentialID_DockerHubPWD', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        // Pass password through stdin instead of using interpolation
-                        sh """
-                            echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
-                        """
-                    }
+                    sh 'docker login -u vishalmalhan -p ${DOCKERHUB_PWD}'
+                    sh 'docker push vishalmalhan/mavenproject:latest'
                 }
             }
-        }
-
-        stage('Docker Build') {
-            steps {
-                // Build Docker image from Dockerfile
-                script {
-                    docker.build("my-app:${env.BUILD_ID}")
-                }
-            }
-        }
-
-        stage('Docker Push') {
-            steps {
-                // Push the Docker image to Docker Hub
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'CredentialID_DockerHubPWD', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh "docker push my-app:${env.BUILD_ID}"
-                    }
-                }
-            }
-        }
-    }
-    post {
-        always {
-            // Cleanup or post steps
-            echo 'Cleaning up...'
-        }
-        success {
-            // Notify on success (optional)
-            echo 'Build succeeded!'
-        }
-        failure {
-            // Notify on failure (optional)
-            echo 'Build failed!'
         }
     }
 }
